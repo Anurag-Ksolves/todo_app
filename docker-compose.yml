@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: todo_app
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - todo_default
+
+  server:
+    depends_on:
+      - mysql
+    image: anuragkarumuri/backend_todo:1.0
+    container_name: backend_node
+    command: node index.js
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: todo_app
+      MYSQL_USER: root
+      MYSQL_HOST: mysql
+    restart: on-failure
+    volumes:
+      - ./backend/:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - todo_default
+  
+  client:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: anuragkarumuri/frontend_todo:1.0
+    container_name: frontend
+    command: npm run dev --host
+    depends_on:
+      - server
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend/:/usr/app
+      - /usr/app/node_modules
+    networks:
+      - todo_default
+
+volumes:
+  mysql_data:
+
+networks:
+  todo_default:
+    name: todo_default
+    external: true
