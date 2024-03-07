@@ -49,12 +49,17 @@ pipeline {
                 echo "***'In Tagging Stage'***"
                 echo "Tagging Backend Image"
                 sh "docker tag backend_todo:latest $DOCKER_CRED_USR/backend_todo:$BUILD_NUMBER"
+
                 echo "Tagging Frontend Image"
                 sh "docker tag frontend_todo:latest $DOCKER_CRED_USR/frontend_todo:$BUILD_NUMBER"
+
                 echo "Pushing Tagged Images"
                 sh "docker push $DOCKER_CRED_USR/backend_todo:$BUILD_NUMBER"
                 sh "docker push $DOCKER_CRED_USR/frontend_todo:$BUILD_NUMBER"
-                
+
+                sh "docker image prune -af"
+                echo "Deleted local images"
+                sh "docker images"
             }
         } 
         
@@ -62,6 +67,7 @@ pipeline {
             steps {
                 // Update docker-compose.yml with new image tags
                 echo "***'In release stage'***" 
+                echo "Altering the Docker Compose File"
                 sh "sed -i 's/backend_todo/$DOCKER_CRED_USR\\/backend_todo:$BUILD_NUMBER/g' docker-compose.yml"
                 sh "sed -i 's/frontend_todo/$DOCKER_CRED_USR\\/frontend_todo:$BUILD_NUMBER/g' docker-compose.yml"
                 sh "cat docker-compose.yml"
