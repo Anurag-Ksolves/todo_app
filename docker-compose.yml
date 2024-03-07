@@ -18,7 +18,7 @@ services:
   server:
     depends_on:
       - mysql
-    image: anuragkarumuri/backend_todo:1.0
+    image: backend_todo
     container_name: backend_node
     command: node index.js
     build: ./backend
@@ -40,7 +40,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: anuragkarumuri/frontend_todo:1.0
+    image: frontend_todo
     container_name: frontend
     command: npm run dev --host
     depends_on:
