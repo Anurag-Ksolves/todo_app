@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Build docker images
-        working directory: .
+        working-directory: .
         run: |
           docker compose build
       
@@ -28,7 +28,7 @@ jobs:
           username: ${{secrets.DOCKER_USERNAME}}
           password: ${{secrets.DOCKER_PASSWORD}}
       
-      -name: Push Docker Images to Docker Hub
-      run: |
-        docker push anuragkarumuri/githubactions:backend-${{github.run_number}}
-        docker push anuragkarumuri/githubactions:frontend-${{github.run_number}}
+      - name: Push Docker Images to Docker Hub
+        run: |
+          docker push anuragkarumuri/githubactions:backend-${{github.run_number}}
+          docker push anuragkarumuri/githubactions:frontend-${{github.run_number}}
