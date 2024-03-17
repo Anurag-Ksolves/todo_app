@@ -10,11 +10,16 @@ app.use(cors());
 let connection;
 
 function handleDisconnect() {
+    const mysqlHost = fs.readFileSync('/etc/backend/MYSQL_HOST', 'utf8').trim() || process.env.MYSQL_HOST;
+    const mysqlUser = fs.readFileSync('/etc/backend/MYSQL_USER', 'utf8').trim() || process.env.MYSQL_USER;
+    const mysqlPassword = fs.readFileSync('/etc/backend/MYSQL_ROOT_PASSWORD', 'utf8').trim() || process.env.MYSQL_ROOT_PASSWORD;
+    const mysqlDatabase = fs.readFileSync('/etc/backend/MYSQL_DATABASE', 'utf8').trim() || process.env.MYSQL_DATABASE;
+
     connection = mysql.createConnection({
-        host: process.env.MYSQL_HOST || 'localhost',
-        user: process.env.MYSQL_USER || 'root',
-        password: process.env.MYSQL_ROOT_PASSWORD || 'password',
-        database: process.env.MYSQL_DATABASE || 'todo_app'
+        host: mysqlHost,
+        user: mysqlUser,
+        password: mysqlPassword,
+        database: mysqlDatabase
     });
 
     connection.connect((err) => {
