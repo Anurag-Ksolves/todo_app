@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import './App.css'
+import dotenv from 'dotenv'
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [newTodoText, setNewTodoText] = useState("");
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
+  const backendUrl = import.meta.env.REACT_APP_BACKEND_URL || 'http://localhost:3000/';
 
   const fetchTodos = async () => {
     try {
-      const res = await axios.get('${backendUrl}/todos');
+      const res = await axios.get(`${backendUrl}todos`);
       setTodos(res.data);
     } catch (err) {
       console.error('Error fetching todos:', err);
@@ -19,7 +20,7 @@ function App() {
 
   const addTodo = async () => {
     try {
-      const res = await axios.post('${backendUrl}todos/add', { todo: newTodoText });
+      const res = await axios.post(`${backendUrl}todos/add`, { todo: newTodoText });
       if (res.data.success) {
         setNewTodoText(""); // Clear the input field after adding todo
         fetchTodos(); // Fetch updated todos
