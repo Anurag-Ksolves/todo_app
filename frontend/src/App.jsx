@@ -7,7 +7,8 @@ function App() {
   const [newTodoText, setNewTodoText] = useState("");
 
   // console.log(import.meta.env.VITE_BACKEND_URL)
-  const backendUrl = 'http://localhost:3000' || import.meta.env.VITE_BACKEND_URL; 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'; 
+  console.log('backend', backendUrl);
 
   const fetchTodos = async () => {
     try {
