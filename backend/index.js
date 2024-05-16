@@ -77,6 +77,9 @@ function addTodo(todoText, callback) {
     });
 }
 
+router.get('/', (req, res) => {
+    res.send("<p>backend</p>")
+});
 
 // GET all todos
 router.get('/todos', (req, res) => {
